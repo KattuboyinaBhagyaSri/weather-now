@@ -8,13 +8,19 @@ const Header = () => {
     const [selectedCity,setSelectedCity] = useState(null)
     let timeOutId = null;
     const handleCityChange = (e) => {
-        setCity(e.target.value)
+        const inputCity = e.target.value
+        if (inputCity === "") {
+            setCity("Hyderabad,India");
+          } else {
+            setCity(inputCity);
+          }
+        setCity(inputCity)
         if (timeOutId)
             clearTimeout(timeOutId)
 
         timeOutId = setTimeout(() => {
-            if (e.target.value.trim()) {
-                fetchcityData(e.target.value)
+            if (inputCity.trim()) {
+                fetchcityData(inputCity)
             }
         }, 500)
     }
@@ -49,14 +55,14 @@ const Header = () => {
 
     return (
         <div>
-            <div className="text-blue-400 text-center font-bold m-2 p-2">Weather Now</div>
+            <div className="text-white text-center font-bold m-2 p-2 bg-[#001d35]">Weather Now</div>
             <div>
-                <input className="border border-blue-400 p-2 my-2 mx-4 rounded-lg w-8/12" type="text"
+                <input className="border border-[#001d35] p-2 my-2 mx-4 rounded-lg w-8/12" type="text"
                     placeholder="Search for preferred city..."
                     value={city}
                     onChange={(e) => handleCityChange(e)}
                 />
-                {loading && <p className="p-2 m-4 text-blue-400">Loading...</p>}
+                {loading && <p className="p-2 m-4 text-[#001d35]">Loading...</p>}
                 {error && <p className="text-red-500">{error}</p>}
                 {selectedCity === null && results.length> 0 && (
                      <ul className=" p-2 m-4 ">
@@ -64,8 +70,6 @@ const Header = () => {
                          <button type="button" onClick={()=>handleSelectedCity(city)}>{city.name}, {city.country}</button></li>))) : <li></li>}
                  </ul>
                 )}
-               
-                <div className="p-2 m-2">Current Location (Gps)</div>
                  {selectedCity && <WeatherDetails selectedCityData={selectedCity}/>}
             </div>
         </div>
